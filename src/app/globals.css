@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; }
+  body { @apply bg-slate-50 text-slate-900 antialiased; overflow-wrap: anywhere; }
+  :focus-visible { @apply outline-2 outline-offset-2 outline-slate-900; }
+}
+@layer components {
+  .card { @apply rounded-xl border border-slate-200 bg-white shadow-soft; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
