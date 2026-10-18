@@ -34,8 +34,9 @@ export async function handleIncoming(db: SupabaseClient, from: string, rawText: 
     const { data: services, error } = await db.from("services").select("id,name,price,duration_minutes").eq("is_active", true).order("price");
     if (error) { console.error("[chatbot] gagal membaca layanan:", error.message); return "Maaf, sistem sedang bermasalah. Coba lagi sebentar."; }
     if (!services?.length) { console.warn("[chatbot] tidak ada layanan aktif yang terbaca (cek menu Layanan dan SUPABASE_SERVICE_ROLE_KEY)"); return "Maaf, belum ada layanan tersedia."; }
-    await saveSession(db, from, "select_service", { serviceIds: services.map((s) => s.id) });
-    return T.services(services);
+    const list = services as { id: string; name: string; price: number; duration_minutes: number }[];
+    await saveSession(db, from, "select_service", { serviceIds: list.map((s) => s.id) });
+    return T.services(list);
   }
 
   switch (session.current_step) {

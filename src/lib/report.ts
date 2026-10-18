@@ -31,7 +31,7 @@ export async function getReport(db: SupabaseClient, from: string, to: string): P
     const dk = new Date(new Date(t.created_at).getTime() + 7 * 3600_000).toISOString().slice(0, 10);
     day.set(dk, (day.get(dk) ?? 0) + Number(t.total_amount));
   }
-  const bk = bookings ?? [];
+  const bk = (bookings ?? []) as { source: string; status: string }[];
   return {
     from, to,
     totalBookings: bk.filter((b) => b.source !== "walk_in").length,

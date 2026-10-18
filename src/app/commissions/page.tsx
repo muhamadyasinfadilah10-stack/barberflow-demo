@@ -20,7 +20,7 @@ export default async function CommissionsPage() {
     profile.role === "owner" ? supabase.from("services").select("*").order("name") : Promise.resolve({ data: [] as Service[] }),
   ]);
   const rows = (data ?? []) as unknown as Tx[];
-  const names = new Map(week.perBarber.map((b) => [b.barber_id, b]));
+  const names = new Map(week.perBarber.map((b) => [b.barber_id, b] as const));
   return (
     <Page supabase={supabase} profile={profile} title={profile.role === "barber" ? "Komisi saya" : "Komisi kapster"}>
       <div className="grid grid-cols-2 gap-3 sm:gap-4">
