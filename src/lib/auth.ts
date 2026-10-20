@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { getAppName } from "@/lib/shop";
 import type { Profile, Role } from "@/types/database";
 
 /** Untuk Server Component: wajib login dan role sesuai, kalau tidak redirect. */
@@ -8,6 +9,7 @@ export async function requireProfile(allowed?: Role[]) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
+  void getAppName(supabase); // mulai ambil nama aplikasi bersamaan dengan profil, tidak menunggu satu per satu
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
   if (!profile || profile.status === "inactive") redirect("/login?error=akses");
   if (allowed && !allowed.includes(profile.role as Role)) redirect("/dashboard");
